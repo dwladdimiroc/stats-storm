@@ -48,18 +48,19 @@ func main() {
 	// (3) Execute App
 	appCmdStormApp := "sh"
 	argsCmdStormApp := []string{"startApp.sh"}
-	dirCmdStormApp := "apps"
+	dirCmdStormApp := "/home/daniel/storm/projects"
 	exec.Execute(appCmdStormApp, argsCmdStormApp, dirCmdStormApp)
 
 	//	// (4) Execute Monitor
 	appCmdMonitor := "java"
-	argsCmdMonitor := []string{"-jar", "storm-monitor.jar", nameApp, "true"}
-	dirCmdMonitor := "monitor"
+	argsCmdMonitor := []string{"-jar", "storm-monitor.jar", nameApp, "localhost", "6627", "true"}
+	dirCmdMonitor := "/home/daniel/storm/monitor"
 
 	wg.Add(1)
 	go func(appCmd string, argsCmd []string, dirCmdMonitor string, duration int) {
 		defer wg.Done()
-		exec.Start(appCmd, argsCmd, dirCmdMonitor, duration)
+		output := exec.Start(appCmd, argsCmd, dirCmdMonitor, duration)
+		fmt.Println(output)
 	}(appCmdMonitor, argsCmdMonitor, dirCmdMonitor, duration)
 
 	wg.Wait()
